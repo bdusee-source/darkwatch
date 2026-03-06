@@ -11,25 +11,20 @@ export function TerminalText({ text, speed = 22 }) {
     }, speed);
     return () => clearInterval(t);
   }, [text, speed]);
-  return (
-    <span>
-      {d}
-      <span style={{ animation: "blink 1s infinite" }}>█</span>
-    </span>
-  );
+  return <span>{d}<span style={{ animation: "blink 1s infinite" }}>█</span></span>;
 }
 
 export function StatBox({ label, value, color, sub }) {
   return (
-    <div style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.07)", borderRadius: 7, padding: "14px 16px", flex: 1, minWidth: 0 }}>
-      <div style={{ fontSize: 24, fontWeight: 800, color, letterSpacing: "-1px" }}>{value}</div>
-      <div style={{ fontSize: 9, color: "rgba(255,255,255,0.65)", letterSpacing: "0.1em", marginTop: 3, textTransform: "uppercase" }}>{label}</div>
-      {sub && <div style={{ fontSize: 8, color, marginTop: 2 }}>{sub}</div>}
+    <div style={{ background: "#0d1117", border: "1px solid #1e293b", borderRadius: 8, padding: "14px 16px", flex: 1, minWidth: 0 }}>
+      <div style={{ fontSize: 26, fontWeight: 800, color, letterSpacing: "-0.5px" }}>{value}</div>
+      <div style={{ fontSize: 12, color: "#64748b", marginTop: 3, fontWeight: 500 }}>{label}</div>
+      {sub && <div style={{ fontSize: 11, color, marginTop: 2, fontWeight: 600 }}>{sub}</div>}
     </div>
   );
 }
 
-export function TagInput({ label, sublabel, placeholder, tags, onAdd, onRemove, tagColor = "#ff9500", icon = "◈" }) {
+export function TagInput({ label, sublabel, placeholder, tags, onAdd, onRemove, tagColor = "#f97316" }) {
   const [val, setVal] = useState("");
   const add = () => {
     const t = val.trim();
@@ -37,48 +32,48 @@ export function TagInput({ label, sublabel, placeholder, tags, onAdd, onRemove, 
   };
   return (
     <div style={{ marginBottom: 18 }}>
-      <div style={{ fontSize: 10, color: tagColor, letterSpacing: "0.13em", marginBottom: 3 }}>{icon} {label}</div>
-      {sublabel && <div style={{ fontSize: 10, color: "rgba(255,255,255,0.52)", marginBottom: 6, lineHeight: 1.5 }}>{sublabel}</div>}
-      <div style={{ display: "flex", gap: 7, marginBottom: 6 }}>
+      <label style={{ display: "block", fontSize: 13, fontWeight: 600, color: "#cbd5e1", marginBottom: 4 }}>{label}</label>
+      {sublabel && <p style={{ fontSize: 12, color: "#64748b", margin: "0 0 8px", lineHeight: 1.5 }}>{sublabel}</p>}
+      <div style={{ display: "flex", gap: 7, marginBottom: 8 }}>
         <input
-          style={{ flex: 1, background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.1)", borderRadius: 6, padding: "8px 11px", color: "#fff", fontSize: 12, outline: "none", boxSizing: "border-box", fontFamily: "monospace" }}
+          style={{ flex: 1, background: "#111827", border: "1px solid #1e293b", borderRadius: 8, padding: "9px 12px", color: "#f1f5f9", fontSize: 14, outline: "none", transition: "border-color 0.15s, box-shadow 0.15s", fontFamily: "inherit" }}
           placeholder={placeholder}
           value={val}
           onChange={(e) => setVal(e.target.value)}
           onKeyDown={(e) => e.key === "Enter" && add()}
         />
-        <button onClick={add} style={{ background: `${tagColor}22`, border: `1px solid ${tagColor}44`, color: tagColor, padding: "0 12px", borderRadius: 6, cursor: "pointer", fontSize: 15, fontWeight: 700 }}>+</button>
+        <button onClick={add} style={{ background: `${tagColor}15`, border: `1px solid ${tagColor}35`, color: tagColor, padding: "0 14px", borderRadius: 8, cursor: "pointer", fontSize: 20, fontWeight: 700, flexShrink: 0, lineHeight: 1 }}>+</button>
       </div>
-      <div style={{ display: "flex", flexWrap: "wrap", gap: 5 }}>
+      <div style={{ display: "flex", flexWrap: "wrap", gap: 6 }}>
         {tags.map((t) => (
-          <span key={t} style={{ background: `${tagColor}14`, border: `1px solid ${tagColor}33`, color: tagColor, padding: "2px 8px", borderRadius: 4, fontSize: 10, display: "flex", alignItems: "center", gap: 4 }}>
+          <span key={t} style={{ background: `${tagColor}10`, border: `1px solid ${tagColor}28`, color: tagColor, padding: "3px 10px", borderRadius: 6, fontSize: 12, fontWeight: 500, display: "flex", alignItems: "center", gap: 5 }}>
             {t}
-            <span onClick={() => onRemove(t)} style={{ cursor: "pointer", opacity: 0.5 }}>✕</span>
+            <span onClick={() => onRemove(t)} style={{ cursor: "pointer", opacity: 0.45, fontSize: 11, lineHeight: 1 }}>✕</span>
           </span>
         ))}
-        {!tags.length && <span style={{ fontSize: 10, color: "rgba(255,255,255,0.45)" }}>None added</span>}
+        {!tags.length && <span style={{ fontSize: 12, color: "#334155", fontStyle: "italic" }}>None added</span>}
       </div>
     </div>
   );
 }
 
-export function ScanSection({ title, badge, badgeColor = "#ff9500", children, defaultOpen = false }) {
+export function ScanSection({ title, badge, badgeColor = "#f97316", children, defaultOpen = false }) {
   const [open, setOpen] = useState(defaultOpen);
   return (
-    <div style={{ marginBottom: 7, border: "1px solid rgba(255,255,255,0.07)", borderRadius: 7, overflow: "hidden" }}>
+    <div style={{ marginBottom: 8, border: "1px solid #1e293b", borderRadius: 10, overflow: "hidden" }}>
       <div
         onClick={() => setOpen((o) => !o)}
-        style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "11px 14px", cursor: "pointer", background: open ? "rgba(255,255,255,0.04)" : "rgba(255,255,255,0.02)", userSelect: "none" }}
+        style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "13px 16px", cursor: "pointer", background: open ? "#0d1117" : "#0a0c10", userSelect: "none", transition: "background 0.15s" }}
       >
-        <div style={{ display: "flex", alignItems: "center", gap: 9 }}>
-          <span style={{ fontSize: 10, fontWeight: 700, color: "rgba(255,255,255,0.65)", letterSpacing: "0.07em" }}>{title}</span>
-          {badge !== undefined && (
-            <span style={{ fontSize: 8, background: badge > 0 ? `${badgeColor}22` : "rgba(255,255,255,0.06)", color: badge > 0 ? badgeColor : "rgba(255,255,255,0.55)", padding: "1px 6px", borderRadius: 9, border: `1px solid ${badge > 0 ? badgeColor + "44" : "rgba(255,255,255,0.07)"}` }}>{badge} added</span>
+        <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+          <span style={{ fontSize: 14, fontWeight: 600, color: open ? "#e2e8f0" : "#94a3b8" }}>{title}</span>
+          {badge !== undefined && badge > 0 && (
+            <span style={{ fontSize: 11, background: `${badgeColor}14`, color: badgeColor, padding: "1px 8px", borderRadius: 99, fontWeight: 600, border: `1px solid ${badgeColor}28` }}>{badge}</span>
           )}
         </div>
-        <span style={{ color: "rgba(255,255,255,0.6)", fontSize: 10, transform: open ? "rotate(90deg)" : "none", transition: "transform 0.2s" }}>▶</span>
+        <span style={{ color: "#475569", fontSize: 11, transform: open ? "rotate(90deg)" : "none", transition: "transform 0.2s" }}>▶</span>
       </div>
-      {open && <div style={{ padding: "14px 14px 2px", borderTop: "1px solid rgba(255,255,255,0.05)" }}>{children}</div>}
+      {open && <div style={{ padding: "16px 16px 4px", borderTop: "1px solid #1e293b", background: "#0a0c10" }}>{children}</div>}
     </div>
   );
 }
@@ -86,10 +81,10 @@ export function ScanSection({ title, badge, badgeColor = "#ff9500", children, de
 export function SimpleInput({ label, sublabel, placeholder, value, onChange }) {
   return (
     <div style={{ marginBottom: 18 }}>
-      <div style={{ fontSize: 10, color: "#ff9500", letterSpacing: "0.13em", marginBottom: 3 }}>◈ {label}</div>
-      {sublabel && <div style={{ fontSize: 10, color: "rgba(255,255,255,0.52)", marginBottom: 6, lineHeight: 1.5 }}>{sublabel}</div>}
+      <label style={{ display: "block", fontSize: 13, fontWeight: 600, color: "#cbd5e1", marginBottom: 4 }}>{label}</label>
+      {sublabel && <p style={{ fontSize: 12, color: "#64748b", margin: "0 0 8px", lineHeight: 1.5 }}>{sublabel}</p>}
       <input
-        style={{ width: "100%", background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.1)", borderRadius: 6, padding: "8px 11px", color: "#fff", fontSize: 12, outline: "none", boxSizing: "border-box", fontFamily: "monospace" }}
+        style={{ width: "100%", background: "#111827", border: "1px solid #1e293b", borderRadius: 8, padding: "10px 13px", color: "#f1f5f9", fontSize: 14, outline: "none", transition: "border-color 0.15s, box-shadow 0.15s", fontFamily: "inherit" }}
         placeholder={placeholder}
         value={value}
         onChange={(e) => onChange(e.target.value)}
@@ -101,16 +96,16 @@ export function SimpleInput({ label, sublabel, placeholder, value, onChange }) {
 export function ToggleGroup({ label, sublabel, options, selected, onToggle }) {
   return (
     <div style={{ marginBottom: 18 }}>
-      <div style={{ fontSize: 10, color: "#ff9500", letterSpacing: "0.13em", marginBottom: 3 }}>◈ {label}</div>
-      {sublabel && <div style={{ fontSize: 10, color: "rgba(255,255,255,0.52)", marginBottom: 6, lineHeight: 1.5 }}>{sublabel}</div>}
-      <div style={{ display: "flex", flexWrap: "wrap", gap: 5 }}>
+      <label style={{ display: "block", fontSize: 13, fontWeight: 600, color: "#cbd5e1", marginBottom: 4 }}>{label}</label>
+      {sublabel && <p style={{ fontSize: 12, color: "#64748b", margin: "0 0 10px", lineHeight: 1.5 }}>{sublabel}</p>}
+      <div style={{ display: "flex", flexWrap: "wrap", gap: 6 }}>
         {options.map((opt) => {
           const active = selected.includes(opt.value);
           return (
             <button
               key={opt.value}
               onClick={() => onToggle(opt.value)}
-              style={{ padding: "4px 10px", borderRadius: 4, cursor: "pointer", fontSize: 10, border: `1px solid ${active ? "rgba(255,149,0,0.5)" : "rgba(255,255,255,0.1)"}`, background: active ? "rgba(255,149,0,0.15)" : "rgba(255,255,255,0.03)", color: active ? "#ff9500" : "rgba(255,255,255,0.7)", transition: "all 0.15s" }}
+              style={{ padding: "6px 13px", borderRadius: 6, cursor: "pointer", fontSize: 12, fontWeight: active ? 600 : 400, border: `1px solid ${active ? "rgba(249,115,22,0.4)" : "#1e293b"}`, background: active ? "rgba(249,115,22,0.1)" : "#0d1117", color: active ? "#f97316" : "#64748b", transition: "all 0.15s" }}
             >
               {opt.label}
             </button>
