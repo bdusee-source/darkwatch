@@ -334,20 +334,45 @@ export default function App() {
               {/* SETUP */}
               {screen === "setup" && (
                 <div style={{ maxWidth: 700 }}>
-                  <div style={{ marginBottom: 28 }}>
-                    <h1 style={{ fontSize: 24, fontWeight: 800, color: "#f1f5f9", margin: "0 0 6px", letterSpacing: "-0.3px" }}>Configure Surveillance</h1>
-                    <p style={{ fontSize: 14, color: "#64748b", margin: "0 0 18px" }}>Define what to monitor. The more signals you add, the better the coverage.</p>
-                    <div style={{ padding: "12px 16px", background: "#0d1117", border: "1px solid #1e293b", borderRadius: 10, display: "flex", alignItems: "center", gap: 14 }}>
-                      <div style={{ flex: 1 }}>
-                        <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 6 }}>
-                          <span style={{ fontSize: 12, fontWeight: 600, color: "#94a3b8" }}>Profile coverage</span>
-                          <span style={{ fontSize: 12, fontWeight: 700, color: "#f97316" }}>{totalConfigured} signals</span>
-                        </div>
-                        <div style={{ height: 4, background: "#1e293b", borderRadius: 99, overflow: "hidden" }}>
-                          <div style={{ height: "100%", width: `${Math.min(100, totalConfigured * 5)}%`, background: "linear-gradient(90deg, #f97316, #ef4444)", borderRadius: 99, transition: "width 0.4s ease" }} />
+                  {/* ── Dramatic header ── */}
+                  <div style={{ marginBottom: 28, position: "relative" }}>
+                    {/* Ambient glow behind header */}
+                    <div style={{ position: "absolute", top: -20, left: -40, width: 300, height: 120, background: "radial-gradient(ellipse, rgba(249,115,22,0.06) 0%, transparent 70%)", pointerEvents: "none" }} />
+
+                    <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 8 }}>
+                      <div style={{ width: 6, height: 6, borderRadius: "50%", background: "#f97316", boxShadow: "0 0 10px #f97316, 0 0 20px #f9731640", animation: "blink 2.5s infinite" }} />
+                      <span style={{ fontSize: 11, fontWeight: 700, color: "#f9731680", letterSpacing: "0.2em", textTransform: "uppercase" }}>Surveillance Configuration</span>
+                    </div>
+                    <h1 style={{ fontSize: 26, fontWeight: 800, color: "#f1f5f9", margin: "0 0 6px", letterSpacing: "-0.5px", lineHeight: 1.2 }}>
+                      Define Your{" "}
+                      <span style={{ background: "linear-gradient(90deg, #f97316, #ef4444)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}>
+                        Attack Surface
+                      </span>
+                    </h1>
+                    <p style={{ fontSize: 14, color: "#475569", margin: "0 0 20px", lineHeight: 1.6 }}>
+                      Every signal you add sharpens detection. Start with your brand name, then layer in infrastructure, personnel, and keywords.
+                    </p>
+
+                    {/* Coverage bar */}
+                    <div style={{ padding: "14px 16px", background: "linear-gradient(135deg, #080c14, #0a0f1a)", border: "1px solid #1a2538", borderRadius: 10, position: "relative", overflow: "hidden" }}>
+                      {/* Moving scan line */}
+                      {totalConfigured > 0 && (
+                        <div style={{ position: "absolute", inset: 0, background: "linear-gradient(90deg, transparent, rgba(249,115,22,0.04), transparent)", animation: "scanLine 3s ease-in-out infinite", pointerEvents: "none" }} />
+                      )}
+                      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 8 }}>
+                        <span style={{ fontSize: 11, fontWeight: 700, color: "#3d4f63", letterSpacing: "0.1em", textTransform: "uppercase" }}>Signal Coverage</span>
+                        <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                          <span style={{ fontSize: 13, fontWeight: 800, color: totalConfigured > 0 ? "#f97316" : "#334155" }}>{totalConfigured}</span>
+                          <span style={{ fontSize: 11, color: "#3d4f63" }}>signals configured</span>
+                          <button onClick={() => setTab("docs")} style={{ padding: "3px 10px", borderRadius: 5, cursor: "pointer", background: "transparent", border: "1px solid #1e293b", color: "#475569", fontSize: 11 }}>Docs</button>
                         </div>
                       </div>
-                      <button onClick={() => setTab("docs")} style={{ padding: "6px 12px", borderRadius: 6, cursor: "pointer", background: "transparent", border: "1px solid #1e293b", color: "#64748b", fontSize: 12, flexShrink: 0 }}>Docs</button>
+                      <div style={{ height: 3, background: "#0f1927", borderRadius: 99, overflow: "hidden" }}>
+                        <div style={{ height: "100%", width: `${Math.min(100, totalConfigured * 5)}%`, background: `linear-gradient(90deg, #f97316, #ef4444)`, borderRadius: 99, transition: "width 0.5s ease", boxShadow: totalConfigured > 0 ? "0 0 8px rgba(249,115,22,0.5)" : "none" }} />
+                      </div>
+                      {totalConfigured === 0 && (
+                        <p style={{ fontSize: 11, color: "#2d3748", margin: "8px 0 0", fontStyle: "italic" }}>Enter your brand name below to begin →</p>
+                      )}
                     </div>
                   </div>
 
@@ -420,12 +445,43 @@ export default function App() {
                     </div>
                   </ScanSection>
 
-                  <div style={{ height: 24 }} />
+                  <div style={{ height: 28 }} />
 
-                  <button onClick={startMonitoring} disabled={!brand.trim()} style={{ width: "100%", padding: "15px", borderRadius: 10, cursor: brand.trim() ? "pointer" : "not-allowed", background: brand.trim() ? "linear-gradient(135deg, #f97316, #ef4444)" : "#1e293b", border: "none", color: brand.trim() ? "#fff" : "#475569", fontSize: 15, fontWeight: 700, transition: "all 0.2s", boxShadow: brand.trim() ? "0 4px 24px rgba(249,115,22,0.2)" : "none" }}>
-                    {brand.trim() ? `Activate Monitoring — ${totalConfigured} signals configured` : "Enter a brand name to get started"}
-                  </button>
-                  <p style={{ fontSize: 12, color: "#334155", textAlign: "center", marginTop: 10, lineHeight: 1.6 }}>Intelligence gathered for defensive purposes only. Results do not constitute legal evidence.</p>
+                  {/* Dramatic activate button */}
+                  <div style={{ position: "relative" }}>
+                    {brand.trim() && (
+                      <div style={{ position: "absolute", inset: -2, borderRadius: 12, background: "linear-gradient(135deg, #f97316, #ef4444)", filter: "blur(18px)", opacity: 0.3, animation: "threatPulse 2.5s ease-in-out infinite", pointerEvents: "none" }} />
+                    )}
+                    <button
+                      onClick={startMonitoring}
+                      disabled={!brand.trim()}
+                      style={{
+                        position: "relative", width: "100%", padding: "17px 20px",
+                        borderRadius: 10, cursor: brand.trim() ? "pointer" : "not-allowed",
+                        background: brand.trim()
+                          ? "linear-gradient(135deg, #f97316 0%, #dc2626 100%)"
+                          : "#080c14",
+                        border: brand.trim() ? "1px solid rgba(249,115,22,0.4)" : "1px solid #141c28",
+                        color: brand.trim() ? "#fff" : "#2d3748",
+                        fontSize: 15, fontWeight: 800, letterSpacing: "0.02em",
+                        transition: "all 0.25s",
+                        boxShadow: brand.trim() ? "0 8px 32px rgba(239,68,68,0.3), inset 0 1px 0 rgba(255,255,255,0.12)" : "none",
+                        display: "flex", alignItems: "center", justifyContent: "center", gap: 10,
+                      }}
+                    >
+                      {brand.trim() ? (
+                        <>
+                          <span style={{ width: 7, height: 7, borderRadius: "50%", background: "rgba(255,255,255,0.85)", boxShadow: "0 0 8px #fff", animation: "blink 1.5s infinite", flexShrink: 0 }} />
+                          Activate Monitoring — {totalConfigured} signal{totalConfigured !== 1 ? "s" : ""} configured
+                        </>
+                      ) : (
+                        "Enter a brand name to begin"
+                      )}
+                    </button>
+                  </div>
+                  <p style={{ fontSize: 11, color: "#1e2d3d", textAlign: "center", marginTop: 12, lineHeight: 1.6 }}>
+                    Intelligence gathered for defensive purposes only · Results do not constitute legal evidence
+                  </p>
                 </div>
               )}
 
