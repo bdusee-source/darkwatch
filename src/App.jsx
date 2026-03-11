@@ -709,7 +709,7 @@ export default function App() {
     projects, keywords, socials, certs, suppliers,
   }), [brand, domains, ips, vips, products, projects, keywords, socials, certs, suppliers]);
 
-  const { intelStatus, intelResults, runAllFeeds } = useIntelFeeds(intelConfig, brand, domains);
+  const { intelStatus, intelResults, runAllFeeds } = useIntelFeeds(intelConfig, paidFeedConfig, brand, domains, ips, keywords);
 
   const {
     isMonitoring, scanCycle, scanPhase, isSweeping,
