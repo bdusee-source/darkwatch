@@ -1,76 +1,63 @@
-# DARKWATCH Intelligence Enterprise
+# DARKWATCH Intelligence Platform
 
-> **Advanced Darkweb Threat Intelligence Platform**  
-> Continuous brand surveillance across darkweb forums, credential markets, paste sites, and threat actor channels.
+> **Defensive use only.** Intelligence gathered by DARKWATCH is intended exclusively for protective security operations. Results do not constitute legal evidence and must not be used offensively.
 
-![React](https://img.shields.io/badge/React-19.2-61DAFB?style=flat&logo=react)
-![Vite](https://img.shields.io/badge/Vite-7.3-646CFF?style=flat&logo=vite)
-![License](https://img.shields.io/badge/License-Private-red?style=flat)
-![Deployment](https://img.shields.io/badge/Deployed-GitHub%20Pages-222?style=flat&logo=github)
+DARKWATCH is a brand and infrastructure threat-monitoring dashboard. It continuously sweeps dark-web forums, paste sites, credential markets, Telegram channels, ransomware blogs, and open-source intelligence feeds to surface mentions, leaks, and attacks targeting your organisation — before they become incidents.
 
 ---
 
 ## Table of Contents
 
-- [Overview](#overview)
-- [Live Demo](#live-demo)
 - [Features](#features)
-- [Tech Stack](#tech-stack)
+- [What's New in v2.0](#whats-new-in-v20)
 - [Getting Started](#getting-started)
-- [Project Structure](#project-structure)
-- [Configuration](#configuration)
+- [Signal Types](#signal-types)
+- [Source Types](#source-types)
 - [Intel Feeds](#intel-feeds)
-- [Alert Channels](#alert-channels)
-- [Reporting Module](#reporting-module)
-- [Threat Types & Severity](#threat-types--severity)
-- [Deployment](#deployment)
-- [Known Limitations](#known-limitations)
-- [Roadmap](#roadmap)
-
----
-
-## Overview
-
-DARKWATCH Intelligence Enterprise is a React-based brand surveillance platform that monitors darkweb sources for threats targeting your organisation. It continuously scans hacker forums, credential dump repositories, paste sites, darknet marketplaces, and Telegram threat actor channels — surfacing signals ranked by severity in a live threat feed.
-
-The platform is designed for **corporate security teams, threat intelligence analysts, brand protection officers, and CISOs** who need continuous visibility into darkweb exposure without manual monitoring.
-
----
-
-## Live Demo
-
-🔴 **[https://bdusee-source.github.io/darkwatch/](https://bdusee-source.github.io/darkwatch/)**
-
-> The live demo runs in simulated mode with a 30-second rescan cycle. Enter a brand name, activate monitoring, and the threat feed populates in real time.
+- [Notifications](#notifications)
+- [Import / Export](#import--export)
+- [Results & Triage](#results--triage)
+- [Architecture](#architecture)
+- [Configuration Reference](#configuration-reference)
+- [Accessibility](#accessibility)
+- [FAQ](#faq)
+- [License](#license)
 
 ---
 
 ## Features
 
-| Feature | Description |
-|---|---|
-| **Continuous Monitoring** | Auto-rescans all configured sources on a timed cycle — no manual triggers needed |
-| **Live Threat Feed** | Threat cards surface in real time with severity ratings, source attribution, and context |
-| **Risk Bar** | Colour-coded risk level bar (Low → Critical) pinned to the top of every screen |
-| **8-Section Profile** | Brand identity, digital infrastructure, personnel, products, social media, supply chain, keywords, and scan config |
-| **Intel Feeds** | Live API integrations: URLhaus, PhishTank, AlienVault OTX, HaveIBeenPwned |
-| **Commercial Feed Config** | Configuration UI for Recorded Future, DarkOwl, Flare, Intel 471, Cybersixgill |
-| **Alert Channels** | Email, Slack, Webhook, and SMS notification configuration |
-| **Reports Module** | Executive (board-level) and Operational (analyst) report generation with PDF export |
-| **Threat Context** | Full context modal per finding: urgency, response actions, assessment indicators, external resources |
-| **Emergency Contact** | Sophos Incident Response contact module with regional phone numbers |
-| **In-App Docs** | Full searchable documentation covering every feature, field, and threat type |
+- **Persistent configuration** — all settings auto-save to `localStorage`. Your setup survives page refreshes and browser restarts.
+- **Import / Export** — download your full configuration as a versioned JSON file; restore or share it with one click.
+- **Bulk tag import** — paste comma- or newline-separated lists into any signal field.
+- **Input validation** — IPs (CIDR), ASNs, domains, email patterns, ticker symbols, and E.164 phone numbers are validated before entry.
+- **Search & sort** — full-text search plus sort by newest, oldest, or severity across the live threat feed.
+- **Threat detail modal** — click any finding to open a full detail panel with source attribution, description, and triage controls.
+- **Triage workflow** — mark findings as *Open*, *Investigating*, *False Positive*, or *Resolved* with inline status badges.
+- **Trend sparkline** — live SVG chart showing threat volume over the last 20 scan cycles.
+- **Masked secrets** — API keys, tokens, and webhook URLs are hidden by default with a reveal toggle.
+- **Keyboard accessible** — all interactive elements support keyboard navigation; modal closes on `Escape`.
+- **Mobile responsive** — collapsible sidebar with hamburger menu and dark overlay on screens < 768 px.
+- **Custom hooks** — state refactored into `useMonitoringConfig` and `useAlertConfig` for maintainability.
 
 ---
 
-## Tech Stack
+## What's New in v2.0
 
-- **Framework:** React 19.2
-- **Build Tool:** Vite 7.3
-- **Styling:** Inline styles (no CSS framework dependency)
-- **Font:** Courier New / monospace (terminal aesthetic)
-- **APIs:** URLhaus, PhishTank, AlienVault OTX, HaveIBeenPwned (v3)
-- **Deployment:** GitHub Pages via `gh-pages`
+| # | Improvement | Details |
+|---|-------------|---------|
+| 1 | **Persist config to localStorage** | Saves on every field change under key `darkwatch_config_v1`. Loads automatically on mount. |
+| 2 | **Import / Export config** | Export as `darkwatch-config.json`; import with file picker. Validated against `_darkwatch: true` sentinel. |
+| 3 | **Bulk tag import** | Every tag field has a ⇥ Bulk button opening a textarea for batch entry. |
+| 4 | **Input validation** | Per-field regex/URL validators with inline error messages and comma-key shortcut. |
+| 5 | **Search & sort** | Real-time search across title, type, source, description. Sort by newest / oldest / severity. |
+| 6 | **Threat detail modal** | Full-screen overlay with description, metadata, and triage controls. Escape to close. |
+| 7 | **Triage workflow** | Four statuses: Open, Investigating, False Positive, Resolved. Badges on threat cards. |
+| 8 | **Trend sparkline** | 20-cycle SVG line chart with directional indicator (↑ red / ↓ green / → grey). |
+| 9 | **Custom hooks** | `useMonitoringConfig` and `useAlertConfig` replace 25+ inline `useState` declarations. |
+| 10 | **Masked API keys** | `MaskedInput` component with 👁 reveal toggle on all sensitive notification fields. |
+| 11 | **Keyboard accessibility** | `aria-label`, `aria-pressed`, `aria-current`, `aria-modal`, `role="dialog"` throughout. |
+| 12 | **Mobile responsive** | CSS media queries, fixed sidebar with CSS class toggling, hamburger button, overlay. |
 
 ---
 
@@ -79,281 +66,333 @@ The platform is designed for **corporate security teams, threat intelligence ana
 ### Prerequisites
 
 - Node.js 18+
-- npm 9+
+- A React 18 project (Vite or Create React App)
 
 ### Installation
 
 ```bash
-# Clone the repository
-git clone https://github.com/bdusee-source/darkwatch.git
+# Clone the repo
+git clone https://github.com/your-org/darkwatch.git
 cd darkwatch
 
 # Install dependencies
 npm install
 
-# Start development server
+# Start the development server
 npm run dev
 ```
 
-The app will be available at `http://localhost:5173`.
+### Usage
 
-### Build
+1. Open the **Scanner** tab (default view on load).
+2. Enter your **Primary brand name** — this is the only required field.
+3. Optionally expand the signal sections to add domains, IPs, personnel, keywords, and more.
+4. Under **Scan Configuration**, select source types and enable at least one alert channel.
+5. Click **Activate Monitoring** — DARKWATCH begins sweeping immediately and navigates to the Results screen.
+6. Use the **search bar**, **filters**, and **sort** dropdown to navigate findings. Click any threat card to open the detail panel and triage the finding.
 
-```bash
-npm run build
-```
-
-### Deploy to GitHub Pages
-
-```bash
-npm run deploy
-```
-
-> This builds the app and pushes the `dist/` folder to the `gh-pages` branch automatically.
+> **Tip:** Your configuration saves automatically. Close and reopen the browser — your setup is still there.
 
 ---
 
-## Project Structure
+## Signal Types
 
-```
-darkwatch/
-├── public/               # Static assets
-├── src/
-│   └── App.jsx           # Main application (all components)
-├── index.html            # HTML entry point
-├── vite.config.js        # Vite configuration (base: '/darkwatch/')
-├── package.json
-└── README.md
-```
+### Brand Identity
 
-> **Note:** All components currently live in `App.jsx`. See [Roadmap](#roadmap) for planned refactoring into separate component files.
+| Field | Format | Purpose |
+|-------|--------|---------|
+| Primary brand name | Free text | Core search term. **Required.** |
+| Industry / sector | Free text | Scopes detection to sector-specific threat actors. |
+| Stock ticker symbols | 1–5 uppercase letters | Financial impersonation and market chatter. |
+| Legal entity names | Free text | Holding companies and subsidiaries. |
+
+### Digital Infrastructure
+
+| Field | Format | Purpose |
+|-------|--------|---------|
+| Domains & subdomains | `acme.com` or `*.acme.com` | Typosquatting, phishing kits, impersonating sites. |
+| Corporate email domains | `@acme.com` | Credential leak matching. |
+| IP ranges / CIDR | `203.0.113.0/24` | Exploit forum mentions of your address space. |
+| ASN numbers | `AS12345` | BGP hijack chatter and ASN-level targeting. |
+| SSL certificate domains | `*.acme.com` | Lookalike certificate detection. |
+
+### People & Personnel
+
+> Ensure your organisation's privacy and data policies permit personnel monitoring before adding names.
+
+| Field | Purpose |
+|-------|---------|
+| Executives & VIPs | Doxxing, impersonation, physical threat chatter. |
+| Key employees | Credential leaks, targeted phishing. |
+| Contractors & third parties | Supply-chain risk and third-party breaches. |
+
+### Products & IP
+
+| Field | Purpose |
+|-------|---------|
+| Product names | Counterfeit software, brand abuse. |
+| Internal project codenames | Insider leak detection — these should never appear externally. |
+| Trademarks & patents | IP theft monitoring. |
+| Source code identifiers | Leaked or cloned code on paste sites and GitHub. |
+
+### Keywords & Exclusions
+
+Use **monitor keywords** for phrases unlikely to appear in standard searches (e.g. `"acme breach"`).
+
+Use **exclusion keywords** to suppress false positives (e.g. `"acme cartoon"` to filter Looney Tunes references).
 
 ---
 
-## Configuration
+## Source Types
 
-### Surveillance Profile
-
-DARKWATCH uses **8 input sections** to build your monitoring profile. The more fields you populate, the higher your detection coverage.
-
-| Section | Key Fields |
-|---|---|
-| **1 · Brand Identity** | Primary brand name *(required)*, industry, stock tickers, legal entity names |
-| **2 · Digital Infrastructure** | Domains, email domains, IP ranges, ASN numbers, SSL certificate domains |
-| **3 · People & Personnel** | VIP/executives, key employees, contractors |
-| **4 · Products & IP** | Product names, project codenames, trademarks, source code identifiers |
-| **5 · Social Media** | Social handles, app/product names |
-| **6 · Supply Chain** | Key suppliers, cloud services and SaaS platforms |
-| **7 · Keywords** | Custom monitoring terms, exclusion keywords |
-| **8 · Scan Config** | Source type toggles, alert channel configuration |
-
-### Source Types
-
-Toggle which source categories are included in each scan cycle:
-
-- Hacker Forums
-- Paste Sites
-- Darknet Marketplaces
-- Telegram Threat Channels
-- IRC Channels
-- Credential Combo Lists
-- Stealer Log Repositories
-- Ransomware Group Blogs
+| Source | Coverage |
+|--------|----------|
+| Hacker Forums | XSS, Exploit.in, RaidForums mirrors, and similar underground forums. |
+| Paste Sites | Pastebin, Ghostbin, and other public paste services. |
+| Marketplaces | Dark-web shops selling stolen data, credentials, and access. |
+| Telegram | Public and semi-public Telegram channels. |
+| IRC | Legacy IRC networks used by some threat communities. |
+| Combo Lists | Large credential combo lists. |
+| Stealer Logs | RedLine, Vidar, and other infostealer output files. |
+| Ransomware Blogs | Victim-shaming leak sites operated by ransomware groups. |
 
 ---
 
 ## Intel Feeds
 
-### Open Source Feeds (Live API)
+### Free feeds
 
-These feeds query live APIs during each scan cycle. Results appear in the threat feed with a **◉ LIVE** badge.
+| Feed | Covers | API key |
+|------|--------|---------|
+| [Have I Been Pwned](https://haveibeenpwned.com/API/Key) | Email and domain exposure in known breaches. | Required (free tier available) |
+| [URLhaus](https://urlhaus.abuse.ch) | Malicious URLs and phishing domains. | Not required |
+| [PhishTank](https://www.phishtank.com) | Community-verified phishing URLs. | Optional (higher rate limits with key) |
+| [AlienVault OTX](https://otx.alienvault.com) | IOCs, malware hashes, threat actor TTPs. | Required (free) |
 
-| Feed | Requires API Key | Notes |
-|---|---|---|
-| **URLhaus (abuse.ch)** | No | CORS-friendly; works on GitHub Pages |
-| **PhishTank** | Optional | Rate-limited without key; CORS may block on GitHub Pages |
-| **AlienVault OTX** | Optional | Public pulses work without key |
-| **HaveIBeenPwned** | Yes (paid for commercial) | Requires server-side proxy on GitHub Pages |
+### Paid feeds
 
-> **CORS Note:** HIBP and PhishTank require server-side proxying when deployed to GitHub Pages. URLhaus and OTX work directly from the browser.
-
-### Commercial Feeds (Backend Required)
-
-Configuration UI is provided for the following commercial platforms. Credentials are stored in UI state and intended for a backend integration — they are **never transmitted directly from the browser**.
-
-- Recorded Future
-- DarkOwl Vision
-- Flare
-- Intel 471
-- Cybersixgill
+| Feed | Speciality |
+|------|-----------|
+| Recorded Future | Predictive intelligence, dark-web actor tracking. |
+| DarkOwl | Dark-web crawling at scale, stealer log ingestion. |
+| Flare | Illicit community monitoring, data leak detection. |
+| Intel 471 | Underground forum infiltration, threat actor profiling. |
+| Cybersixgill | Real-time dark-web stream, automated IOC extraction. |
 
 ---
 
-## Alert Channels
+## Notifications
 
-Configure up to four independent notification channels in **Section 8 · Scan Configuration**. Each channel has its own minimum severity threshold.
+DARKWATCH supports four delivery channels. All require a backend proxy for live delivery — test sends are simulated client-side.
 
 ### Email
 - Recipients (comma-separated)
-- Subject line prefix for inbox filtering
-- Daily digest mode (bundle all alerts into one summary)
-- Minimum severity: Critical / High / Medium / Low
+- Subject prefix (default: `[DARKWATCH]`)
+- Minimum severity threshold
+- Daily digest mode
 
 ### Slack
-- Incoming webhook URL
-- Target channel (e.g. `#security-alerts`)
+- Incoming webhook URL *(masked)*
+- Channel override
 - Bot display name
 - Minimum severity threshold
 
-### Webhook
-- HTTPS endpoint URL
-- Bearer token authentication
-- HTTP method (POST or PUT)
-- JSON payload format:
-```json
-{
-  "severity": "critical",
-  "type": "data_leak",
-  "source": "BreachForums",
-  "content": "...",
-  "detectedAt": 1234567890000,
-  "brand": "Acme Corporation"
-}
-```
+### Webhook (SIEM / SOAR)
+- Endpoint URL
+- Bearer token *(masked)*
+- HTTP method (POST / PUT)
+- Minimum severity threshold
 
 ### SMS
-- E.164 format phone numbers (e.g. `+442071234567`)
-- Provider: Twilio / AWS SNS / Vonage
-- API credentials per provider
-- Recommended for **Critical severity only**
-
-> **Simulation mode:** The ▶ TEST button simulates delivery only. A backend integration is required for live notifications.
+- Phone numbers in E.164 format *(validated)*
+- Provider: Twilio, AWS SNS, or Vonage
+- Account SID / API key *(masked)*
+- Auth token / secret *(masked)*
+- Minimum severity threshold (Critical recommended to avoid alert fatigue)
 
 ---
 
-## Reporting Module
-
-Navigate to the **Reports** tab to generate structured threat intelligence reports.
-
-### Report Types
-
-| Type | Audience | Contents |
-|---|---|---|
-| **Executive Report** | Board, C-suite | Risk posture, KPI metrics, severity breakdown, board recommendations |
-| **Operational Report** | SOC analysts, security managers | Full findings log, threat type breakdown, source rankings, analyst action queue |
-
-### Reporting Periods
-
-| Period | Use Case |
-|---|---|
-| **Weekly (7 days)** | Routine security team stand-ups |
-| **Monthly (30 days)** | Management reporting cycle |
-| **Quarterly (90 days)** | Board packs and executive briefings |
+## Import / Export
 
 ### Exporting
 
-Click **PRINT / EXPORT PDF** after generating a report. In the browser print dialog, select **Save as PDF** as the destination.
+Click **↓ Export config** on the Setup screen. A file named `darkwatch-config.json` is downloaded.
 
----
+### Importing
 
-## Threat Types & Severity
+Click **↑ Import config**, select a `darkwatch-config.json` file, and all fields populate immediately.
 
-### Threat Types
-
-| Type | Default Severity | Description |
-|---|---|---|
-| Data Leak | Critical | Organisational data posted or being sold |
-| Credential Exposure | High | Employee credentials in stealer logs or combo lists |
-| Sale Listing | Critical | Data, access, or source code being sold |
-| Phishing Kit | Critical | Fake login portal harvesting credentials |
-| Doxxing | Critical | Personal information of VIP or employee posted publicly |
-| Exploit Listing | High | Vulnerability in your systems being traded |
-| Typosquat | High | Domain similar to yours registered for impersonation |
-| Impersonation | High | Fake social media account posing as your brand |
-| Counterfeit | High | Fake versions of your products being sold |
-| Mention | Medium | Brand referenced in threat actor context |
-
-### Severity Levels & Response Matrix
-
-| Level | Score | Risk Bar | Response Time |
-|---|---|---|---|
-| **CRITICAL** | 7.5–10 | 🔴 Pulsing red | Immediate — within 1 hour |
-| **HIGH** | 5.0–7.4 | 🟠 Orange | Same day — within 4 hours |
-| **MEDIUM** | 2.5–4.9 | 🟡 Amber | Within 24–48 hours |
-| **LOW** | 0–2.4 | 🟢 Green | Weekly review cycle |
-
-### Risk Score Calculation
-
-```
-score = min(10, Σ(finding_weights) × 0.4)
-
-Weights: Critical = 4 | High = 2 | Medium = 1 | Low = 0.25
-```
-
----
-
-## Deployment
-
-The app is deployed to GitHub Pages using the `gh-pages` package.
-
-### Setup (one-time)
-
-1. Ensure `vite.config.js` has `base: '/darkwatch/'`
-2. Ensure `package.json` has the deploy scripts:
+### Config file structure
 
 ```json
-"scripts": {
-  "predeploy": "npm run build",
-  "deploy": "gh-pages -d dist"
+{
+  "_darkwatch": true,
+  "version": 1,
+  "brand": "Acme Corporation",
+  "industry": "Financial Services",
+  "stockTickers": ["ACME"],
+  "legalEntities": ["Acme Holdings Ltd"],
+  "domains": ["acme.com", "acme.io"],
+  "emails": ["@acme.com"],
+  "ips": ["203.0.113.0/24"],
+  "asns": ["AS12345"],
+  "certs": ["*.acme.com"],
+  "vips": ["Jane Smith, CEO"],
+  "employees": [],
+  "contractors": [],
+  "products": ["AcmePay"],
+  "projects": ["Project Nighthawk"],
+  "trademarks": ["AcmePay™"],
+  "sourcePaths": ["acme-internal-sdk"],
+  "socials": ["@acmecorp"],
+  "appNames": ["Acme Mobile"],
+  "suppliers": [],
+  "cloudServices": ["GitHub org/acme"],
+  "keywords": ["acme breach"],
+  "excludeKeywords": ["acme cartoon"],
+  "monitorSources": ["forums", "paste", "markets", "telegram"]
 }
 ```
 
-### Deploy
+> ⚠️ **Security:** The config file contains API keys in plaintext. Do not commit it to version control or share it publicly.
 
-```bash
-npm run deploy
+---
+
+## Results & Triage
+
+### Risk score
+
+| Score | Label | Action |
+|-------|-------|--------|
+| 0–2 | Minimal | Review weekly. |
+| 3–4 | Low | Schedule analyst review within the week. |
+| 5–6 | Moderate | Assign to SOC within 24 hours. |
+| 7–8 | High | Escalate immediately; notify CISO. |
+| 9–10 | Critical | Activate incident response procedures. |
+
+### Triage statuses
+
+| Status | Badge colour | Meaning |
+|--------|-------------|---------|
+| Open | — | Unreviewed (default). |
+| Investigating | Amber | Analyst is actively reviewing. |
+| False Positive | Green | Confirmed false alarm. |
+| Resolved | Blue | Remediated or acknowledged. |
+
+> Triage statuses are stored in React state and are not persisted to `localStorage`. Export a config snapshot before resetting if you need a record.
+
+### Trend sparkline
+
+The line chart next to the scan metadata shows threat volume over the last 20 scan cycles. Requires at least 2 completed cycles to appear.
+
+| Indicator | Colour | Meaning |
+|-----------|--------|---------|
+| ↑ | Red | Increasing threat activity |
+| ↓ | Green | Decreasing threat activity |
+| → | Grey | No change |
+
+---
+
+## Architecture
+
+```
+src/
+├── App.jsx                    # Root component — layout, routing, state composition
+├── data/
+│   └── constants.js           # SEVERITY_CONFIG and other shared constants
+├── utils/
+│   └── helpers.js             # calcRisk() and utility functions
+├── hooks/
+│   ├── useIntelFeeds.js       # Intel feed connections (HIBP, OTX, etc.)
+│   └── useScanEngine.js       # Scan loop, result aggregation, timing
+├── components/
+│   ├── RiskBar.jsx            # Top status bar
+│   ├── ThreatCard.jsx         # Individual finding card
+│   └── UI.jsx                 # StatBox, TagInput, ScanSection, SimpleInput, ToggleGroup, TerminalText
+└── screens/
+    ├── DocScreen.jsx          # Documentation (this file)
+    ├── ReportScreen.jsx       # Exportable PDF report
+    ├── ContactScreen.jsx      # Emergency contacts
+    └── IntelFeedsScreen.jsx   # Feed configuration UI
 ```
 
-### GitHub Pages Settings
+### Custom hooks (v2.0)
 
-Go to **Settings → Pages** in your repository and set the source branch to `gh-pages`.
+**`useMonitoringConfig`** — owns all 22+ signal fields, auto-saves to and auto-loads from `localStorage`.
 
-Live URL: `https://bdusee-source.github.io/darkwatch/`
+**`useAlertConfig`** — owns notification channel state, `updateNotif`, `testChannel`, `updateIntel`, and `updatePaidFeed` callbacks.
 
----
+### State persistence
 
-## Known Limitations
-
-| Limitation | Detail |
-|---|---|
-| **CORS on GitHub Pages** | HIBP and PhishTank require a backend proxy when deployed to GitHub Pages |
-| **Alert delivery** | Alert channels are UI-configured only — live delivery requires a backend integration |
-| **Simulated threats** | The threat pool uses templated simulated findings; production deployment requires live feed backend |
-| **Single-file architecture** | All components are in `App.jsx` — refactoring into separate files is planned |
-| **No persistence** | Findings and profile configuration are in-memory only — a page refresh clears all data |
-| **No authentication** | The app has no login/auth layer in its current form |
+| Key | Storage | Contents |
+|-----|---------|----------|
+| `darkwatch_config_v1` | `localStorage` | All signal fields and monitor source selection |
+| Triage map | React state | `uid → status` — session only |
+| Threat history | React state | Last 20 scan-cycle counts for sparkline |
 
 ---
 
-## Roadmap
+## Configuration Reference
 
-- [ ] **Component refactoring** — Split `App.jsx` into separate component files (`ReportScreen`, `DocScreen`, `ContactScreen`, `IntelFeedsScreen`)
-- [ ] **Backend proxy** — Node.js / Cloudflare Worker to proxy HIBP and PhishTank API calls
-- [ ] **Live alert delivery** — Backend integration for Email, Slack, Webhook, and SMS channels
-- [ ] **Profile persistence** — Save surveillance profile to `localStorage` or a backend
-- [ ] **`useMemo` / `useCallback` optimisation** — Prevent unnecessary re-renders on `ThreatCard` and `entities`
-- [ ] **`@media print` styles** — Improve PDF export quality for reports
-- [ ] **Authentication** — User login and profile management
-- [ ] **Static data extraction** — Move `DOCS`, `THREAT_POOL`, and `THREAT_CONTEXT` to separate data files
+### Input validation rules
+
+| Field type | Validation | Example valid input |
+|------------|------------|---------------------|
+| Domain | `/^(\*\.)?([a-z0-9-]+\.)+[a-z]{2,}$/i` | `acme.com`, `*.acme.io` |
+| Email domain | `/^@?[a-z0-9.-]+\.[a-z]{2,}$/i` | `@acme.com`, `acme.com` |
+| IP / CIDR | `/^(\d{1,3}\.){3}\d{1,3}(\/\d{1,2})?$/` | `10.0.0.0/8`, `203.0.113.1` |
+| ASN | `/^AS\d+$/i` | `AS12345` |
+| Phone (E.164) | `/^\+\d{7,15}$/` | `+442071234567` |
+| Ticker | `/^[A-Z]{1,5}$/` | `ACME`, `GOOGL` |
+| Free text | Any non-empty string | — |
+
+### Keyboard shortcuts
+
+| Shortcut | Action |
+|----------|--------|
+| `Enter` or `,` in tag input | Submit current value |
+| `Escape` | Close threat detail modal |
+| `Tab` | Navigate between interactive elements |
 
 ---
 
-## Disclaimer
+## Accessibility
 
-> DARKWATCH Intelligence Enterprise is a **defensive security tool**. All intelligence is gathered from publicly accessible sources for protective purposes only. The platform does not purchase data, interact with threat actors, or facilitate any illegal activity. Results are for threat awareness and do not constitute legal evidence.
->
-> Do not attempt to access `.onion` sources directly or contact threat actors. Engage qualified incident response professionals for confirmed breaches.
+DARKWATCH v2.0 includes the following accessibility improvements:
+
+- `aria-label` on all icon-only buttons (×, 👁, ☰, +)
+- `aria-pressed` on toggle switches
+- `aria-current="page"` on active sidebar and doc nav items
+- `aria-modal="true"` and `role="dialog"` on the threat detail modal
+- `aria-disabled` on the disabled Activate Monitoring button
+- `aria-expanded` on FAQ accordion items
+- Keyboard-dismissible modal (`Escape` key)
+- Print stylesheet hides all chrome for clean output
 
 ---
 
-*Built with React + Vite · Deployed on GitHub Pages*
+## FAQ
+
+**Why aren't I seeing any threats after activating?**
+DARKWATCH uses a simulated scan engine by default. Real findings require live API keys in the Intel Feeds tab. The simulated engine generates representative findings after one or two scan cycles — wait up to 60 seconds.
+
+**My configuration disappeared after a browser update.**
+Some browser updates clear `localStorage`. Always export your config before updating. Re-import from the Setup screen to restore.
+
+**Can I monitor multiple brands simultaneously?**
+Not in the current version. Export your current config, click Reset & reconfigure, set up the new brand, and import the old config later to switch back.
+
+**What does marking a finding as False Positive do?**
+It assigns a green badge in the current session. The scan engine is not updated — the same finding may be re-surfaced on the next cycle.
+
+**Are my API keys safe?**
+Keys are stored in React state and in `localStorage` on your device only. They are never transmitted to any DARKWATCH server. The exported config JSON contains keys in plaintext — protect it accordingly.
+
+**How do I clear all data and start fresh?**
+Click **Reset & reconfigure** on the Results screen. To also clear `localStorage`, open DevTools → Application → Local Storage and delete the `darkwatch_config_v1` key.
+
+---
+
+## License
+
+DARKWATCH is provided for defensive security research purposes. Usage is subject to your organisation's acceptable-use policy and applicable law. The authors accept no liability for misuse.
