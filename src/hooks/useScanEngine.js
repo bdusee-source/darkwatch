@@ -62,8 +62,12 @@ export function useScanEngine({ entities, runAllFeeds, onSweepComplete }) {
           ]
         : SCAN_PHASES;
 
-      // Fire real intel fetches in parallel while phases animate
-      const realIntelPromise = runAllFeeds();
+      // Fire real intel fetches in parallel while phases animate.
+      // runAllFeeds returns a Promise<finding[]> — we await it after phases finish.
+      const realIntelPromise = runAllFeeds().catch((err) => {
+        console.warn("[useScanEngine] runAllFeeds error:", err);
+        return []; // never let a feed failure block results
+      });
 
       let pi = 0;
       const tick = () => {
@@ -71,7 +75,19 @@ export function useScanEngine({ entities, runAllFeeds, onSweepComplete }) {
           setScanPhase(phaseList[pi++]);
           sweepTimerRef.current = setTimeout(tick, isInitial ? 600 : 400);
         } else {
-          realIntelPromise.then((realFindings) => {
+          realIntelPromise.then((rawRealFindings) => {
+            const realFindings = (rawRealFindings || []).map((f) => ({
+              // Ensure every real finding has the fields ThreatCard expects
+              ...f,
+              // ThreatCard reads result.content — map from description/title
+              content: f.content || f.description || f.title || "No detail available.",
+              // ThreatCard renders result.tor — use a readable fallback for real findings
+              tor: f.tor || f.source || "Live feed",
+              detectedAt: f.detectedAt || (f.timestamp ? new Date(f.timestamp).getTime() : Date.now()),
+              real: true,
+              feedSource: f.source || "Intel Feed",
+            }));
+
             const count = isInitial
               ? Math.min(eligible.length, 5 + Math.floor(Math.random() * 4))
               : Math.min(eligible.length, 1 + Math.floor(Math.random() * 3));

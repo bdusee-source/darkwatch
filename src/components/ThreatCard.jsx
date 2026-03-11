@@ -25,7 +25,7 @@ function ContextModal({ result, entities, onClose }) {
                 <span style={{ fontSize: 12, color: "#475569" }}>{timeAgo(result.detectedAt)}</span>
               </div>
               <div style={{ fontSize: 16, fontWeight: 700, color: "#f1f5f9", marginBottom: 4 }}>{type.label} — {result.source}</div>
-              <div style={{ fontSize: 12, color: "#475569", fontFamily: "'JetBrains Mono', monospace" }}>{result.tor}</div>
+              <div style={{ fontSize: 12, color: "#475569", fontFamily: "'JetBrains Mono', monospace" }}>{result.tor || result.source || ""}</div>
             </div>
             <button onClick={onClose} style={{ background: "#1e293b", border: "1px solid #334155", color: "#94a3b8", width: 30, height: 30, borderRadius: 6, cursor: "pointer", fontSize: 14, flexShrink: 0, display: "flex", alignItems: "center", justifyContent: "center" }}>✕</button>
           </div>
@@ -148,7 +148,7 @@ export function ThreatCard({ result, entities, isNew }) {
             {result.feedSource && <span style={{ fontSize: 11, color: "#334155" }}>· {result.feedSource}</span>}
           </div>
           <div style={{ display: "flex", alignItems: "center", gap: 8, flexShrink: 0 }}>
-            <span style={{ fontSize: 11, color: "#334155", fontFamily: "'JetBrains Mono', monospace", maxWidth: 160, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{result.tor}</span>
+            <span style={{ fontSize: 11, color: "#334155", fontFamily: "'JetBrains Mono', monospace", maxWidth: 160, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{result.tor || result.source || ""}</span>
             {result.real && result.contextUrl ? (
               <a href={result.contextUrl} target="_blank" rel="noopener noreferrer" style={{ padding: "4px 11px", borderRadius: 6, background: `${sev.color}10`, border: `1px solid ${sev.color}30`, color: sev.color, fontSize: 12, fontWeight: 600, textDecoration: "none" }}>View Source ↗</a>
             ) : (

@@ -403,7 +403,7 @@ export function useIntelFeeds(intelConfig, paidFeedConfig, brand, domains = [], 
   const runningRef = useRef(false);
 
   const runAllFeeds = useCallback(async () => {
-    if (!brand || runningRef.current) return;
+    if (!brand || runningRef.current) return [];
     runningRef.current = true;
 
     const setStatus = (feed, status) =>
@@ -457,8 +457,11 @@ export function useIntelFeeds(intelConfig, paidFeedConfig, brand, domains = [], 
       }
     });
 
-    setIntelResults(dedup(allResults));
+    const dedupedResults = dedup(allResults);
+    setIntelResults(dedupedResults);
     runningRef.current = false;
+    // Return findings so useScanEngine can merge them with simulated results
+    return dedupedResults;
   }, [intelConfig, paidFeedConfig, brand, domains, ips, keywords]);
 
   return { intelResults, intelStatus, runAllFeeds };
